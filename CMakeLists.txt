@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.25)
 project(ORB_SLAM3)
 
 IF(NOT CMAKE_BUILD_TYPE)
@@ -46,6 +46,9 @@ include_directories(
 ${PROJECT_SOURCE_DIR}
 ${PROJECT_SOURCE_DIR}/include
 ${PROJECT_SOURCE_DIR}/include/CameraModels
+${PROJECT_SOURCE_DIR}/Thirdparty/
+${PROJECT_SOURCE_DIR}/Thirdparty/DBoW2
+${PROJECT_SOURCE_DIR}/Thirdparty/g2o
 ${PROJECT_SOURCE_DIR}/Thirdparty/Sophus
 ${EIGEN3_INCLUDE_DIR}
 ${Pangolin_INCLUDE_DIRS}
