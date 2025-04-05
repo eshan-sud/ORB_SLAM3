@@ -1615,6 +1615,15 @@ Sophus::SE3f Tracking::GrabImageMonocular(const cv::Mat &im, const double &times
 }
 
 
+// -- Changed - Eshan Sud
+Sophus::SE3f Tracking::GetCameraPose() {
+    if (mState == LOST) {
+        return Sophus::SE3f();
+    }
+    Sophus::SE3f Tcw = mCurrentFrame.GetPose();
+    return Tcw.inverse();
+}
+
 void Tracking::GrabImuData(const IMU::Point &imuMeasurement)
 {
     unique_lock<mutex> lock(mMutexImuQueue);

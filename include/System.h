@@ -192,6 +192,9 @@ public:
     void InsertTrackTime(double& time);
 #endif
 
+    // Expose the trakining information for ROS2 integration
+    Tracking* GetTracker() { return mpTracker; } // -- Changed - Eshan Sud
+
 private:
 
     void SaveAtlas(int type);
