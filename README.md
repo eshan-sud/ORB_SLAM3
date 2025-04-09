@@ -16,6 +16,8 @@ This repository is a modified version of [ORB_SLAM3](https://github.com/UZ-SLAML
 - In **mono_euroc.cc** around line 83 change the last argument of the function to true \
 "ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::MONOCULAR, true);" \
 which is false by default and then rebuild the package.
+- Fixed : SegmentationFault ; occurring on saving KeyFrameTrjectory.txt
+ 	- Uncommented some lines in file : System.cc, function : System::Shutdown(), around line : 517
 
 ## How to build
 Clone the repository:
