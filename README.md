@@ -6,8 +6,10 @@ This repository is a modified version of [ORB_SLAM3](https://github.com/UZ-SLAML
 
 ## Summary
 - Succesfully tested in **Debian GNU/Linux 12 (bookworm)** and **ROS2 Humble Hawksbill**(with OpenCV 4.2.0)
-- Update from C++11 to C++14
+- Updated from C++11 to C++14
 - Fixed unexpected <span style="color:red">error</span> when start **STEREO** mode with **Rectified** camera type
+- Fixed : SegmentationFault ; occurring on saving KeyFrameTrjectory.txt
+- In **mono_tum.cc**, added support for toggling the Pangolin viewer via a 4th CLI argument (`true` or `false`)
 
 ## Modifications made:
 - Updated CMakeLists.txt to use cmake version - 3.25+
@@ -16,8 +18,8 @@ This repository is a modified version of [ORB_SLAM3](https://github.com/UZ-SLAML
 - In **mono_euroc.cc** around line 83 change the last argument of the function to true \
 "ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::MONOCULAR, true);" \
 which is false by default and then rebuild the package.
-- Fixed : SegmentationFault ; occurring on saving KeyFrameTrjectory.txt
- 	- Uncommented some lines in file : System.cc, function : System::Shutdown(), around line : 517
+- Uncommented some lines in file : System.cc, function : System::Shutdown(), around line : 517
+- Added CLI support for bUseViewer in mono_tum.cc: parsed at line 39, declared at line 52, and passed to the System constructor at line 59.
 
 ## How to build
 Clone the repository:
