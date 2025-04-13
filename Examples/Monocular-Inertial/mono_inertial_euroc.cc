@@ -40,9 +40,9 @@ double ttrack_tot = 0;
 int main(int argc, char *argv[])
 {
 
-    if(argc < 5)
+    if(argc < 6)
     {
-        cerr << endl << "Usage: ./mono_inertial_euroc path_to_vocabulary path_to_settings path_to_sequence_folder_1 path_to_times_file_1 (path_to_image_folder_2 path_to_times_file_2 ... path_to_image_folder_N path_to_times_file_N) " << endl;
+        cerr << endl << "Usage: ./mono_inertial_euroc path_to_vocabulary path_to_settings path_to_sequence_folder_1 path_to_times_file_1 (path_to_image_folder_2 path_to_times_file_2 ... path_to_image_folder_N path_to_times_file_N) [bUseViewer(true|false)]" << endl;
         return 1;
     }
 
@@ -54,6 +54,11 @@ int main(int argc, char *argv[])
     {
         file_name = string(argv[argc-1]);
         cout << "file name: " << file_name << endl;
+    }
+    bool bUseViewer = true;
+    if (argc >= 7) {
+         std::string viewer_flag = std::string(argv[6]);
+         bUseViewer = (viewer_flag != "false");
     }
 
     // Load all sequences:
@@ -117,7 +122,7 @@ int main(int argc, char *argv[])
     cout.precision(17);
 
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
-    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::IMU_MONOCULAR, true);
+    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::IMU_MONOCULAR, bUseViewer);
     float imageScale = SLAM.GetImageScale();
 
     double t_resize = 0.f;

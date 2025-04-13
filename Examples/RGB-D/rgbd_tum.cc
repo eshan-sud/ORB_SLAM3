@@ -32,9 +32,9 @@ void LoadImages(const string &strAssociationFilename, vector<string> &vstrImageF
 
 int main(int argc, char **argv)
 {
-    if(argc != 5)
+    if(argc < 4 || argc > 5)
     {
-        cerr << endl << "Usage: ./rgbd_tum path_to_vocabulary path_to_settings path_to_sequence path_to_association" << endl;
+        cerr << endl << "Usage: ./rgbd_tum path_to_vocabulary path_to_settings path_to_sequence path_to_association use_viewer(true|false)" << endl;
         return 1;
     }
 
@@ -57,9 +57,10 @@ int main(int argc, char **argv)
         cerr << endl << "Different number of images for rgb and depth." << endl;
         return 1;
     }
+    bool bUseViewer = (string(argv[5]) == "true");
 
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
-    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::RGBD,true);
+    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::RGBD,true, bUseViewer);
     float imageScale = SLAM.GetImageScale();
 
     // Vector for tracking time statistics

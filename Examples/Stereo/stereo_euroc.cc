@@ -33,11 +33,18 @@ void LoadImages(const string &strPathLeft, const string &strPathRight, const str
 
 int main(int argc, char **argv)
 {
-    if(argc < 5)
+    if(argc != 5 && argc != 7 && argc != 6)
     {
-        cerr << endl << "Usage: ./stereo_euroc path_to_vocabulary path_to_settings path_to_sequence_folder_1 path_to_times_file_1 (path_to_image_folder_2 path_to_times_file_2 ... path_to_image_folder_N path_to_times_file_N) (trajectory_file_name)" << endl;
-
+        cerr << endl << "Usage: ./stereo_euroc path_to_vocabulary path_to_settings path_to_sequence_folder_1 path_to_times_file_1 (path_to_image_folder_2 path_to_times_file_2 ... path_to_image_folder_N path_to_times_file_N) (trajectory_file_name) [bUseviewer(true|false)]" << endl;
         return 1;
+    }
+
+    bool bUseViewer = true;
+    if (argc == 6 || argc == 7) {
+        std::string last_arg = std::string(argv[argc - 1]);
+        if (last_arg == "true" || last_arg == "false") {
+            bUseViewer = (last_arg != "false");
+        }
     }
 
     const int num_seq = (argc-3)/2;
@@ -87,8 +94,9 @@ int main(int argc, char **argv)
     cout << endl << "-------" << endl;
     cout.precision(17);
 
+
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
-    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::STEREO, true);
+    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::STEREO, bUseViewer);
 
     cv::Mat imLeft, imRight;
     for (seq = 0; seq<num_seq; seq++)

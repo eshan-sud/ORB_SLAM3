@@ -33,10 +33,16 @@ void LoadImages(const string &strSequence, vector<string> &vstrImageFilenames,
 
 int main(int argc, char **argv)
 {
-    if(argc != 4)
+    if(argc < 4 || erc > 5)
     {
-        cerr << endl << "Usage: ./mono_kitti path_to_vocabulary path_to_settings path_to_sequence" << endl;
+        cerr << endl << "Usage: ./mono_kitti path_to_vocabulary path_to_settings path_to_sequence bUseViewer(true|false)" << endl;
         return 1;
+    }
+    bool useViewer = true;
+    if (argc == 5) {
+        std::string arg = argv[4];
+        std::transform(arg.begin(), arg.end(), arg.begin(), ::tolower);
+        if (arg == "false" || arg == "0" || arg == "no") useViewer = false;
     }
 
     // Retrieve paths to images
@@ -47,7 +53,7 @@ int main(int argc, char **argv)
     int nImages = vstrImageFilenames.size();
 
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
-    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::MONOCULAR,true);
+    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::MONOCULAR,bUseViewer);
     float imageScale = SLAM.GetImageScale();
 
     // Vector for tracking time statistics
