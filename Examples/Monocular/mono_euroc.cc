@@ -32,9 +32,9 @@ void LoadImages(const string &strImagePath, const string &strPathTimes,
 
 int main(int argc, char **argv)
 {
-    if(argc < 5)
+    if (argc < 5 || argc > 6)
     {
-        cerr << endl << "Usage: ./mono_euroc path_to_vocabulary path_to_settings path_to_sequence_folder_1 path_to_times_file_1 (path_to_image_folder_2 path_to_times_file_2 ... path_to_image_folder_N path_to_times_file_N) (trajectory_file_name)" << endl;
+        cerr << endl << "Usage: ./mono_euroc path_to_vocabulary path_to_settings path_to_sequence_folder path_to_times_file [bUseViewer=true|false]" << endl;
         return 1;
     }
 
@@ -47,6 +47,7 @@ int main(int argc, char **argv)
         file_name = string(argv[argc-1]);
         cout << "file name: " << file_name << endl;
     }
+
 
     // Load all sequences:
     int seq;
@@ -69,6 +70,7 @@ int main(int argc, char **argv)
         tot_images += nImages[seq];
     }
 
+
     // Vector for tracking time statistics
     vector<float> vTimesTrack;
     vTimesTrack.resize(tot_images);
@@ -80,7 +82,15 @@ int main(int argc, char **argv)
     int fps = 20;
     float dT = 1.f/fps;
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
-    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::MONOCULAR, true);
+    bool bUseViewer = true;
+    if (argc == 6)
+    {
+        string viewer_arg = argv[5];
+        std::transform(viewer_arg.begin(), viewer_arg.end(), viewer_arg.begin(), ::tolower);
+        if (viewer_arg == "false" || viewer_arg == "0")
+            bUseViewer = false;
+    }
+    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::MONOCULAR, bUseViewer);
     float imageScale = SLAM.GetImageScale();
 
     double t_resize = 0.f;
