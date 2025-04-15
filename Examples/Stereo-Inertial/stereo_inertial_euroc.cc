@@ -41,27 +41,39 @@ void LoadIMU(const string &strImuPath, vector<double> &vTimeStamps, vector<cv::P
 
 int main(int argc, char **argv)
 {
-    if(argc < 6)
+    if (argc < 6)
     {
-        cerr << endl << "Usage: ./stereo_inertial_euroc path_to_vocabulary path_to_settings path_to_sequence_folder_1 path_to_times_file_1 (path_to_image_folder_2 path_to_times_file_2 ... path_to_image_folder_N path_to_times_file_N) [bUseViewer(true|false)] " << endl;
+        cerr << endl << "Usage: ./stereo_inertial_euroc path_to_vocabulary path_to_settings path_to_sequence_folder_1 path_to_times_file_1 "
+             << "(path_to_image_folder_2 path_to_times_file_2 ... path_to_image_folder_N path_to_times_file_N) "
+             << "[bUseViewer(true|false)] [output_file]" << endl;
         return 1;
     }
 
-    const int num_seq = (argc-3)/2;
+    // Detect how many optional args are passed
+    int num_optional_args = 0;
+    if (argc >= 4 && (string(argv[argc - 1]) == "true" || string(argv[argc - 1]) == "false"))
+        num_optional_args = 1;
+    else if (argc >= 5 && (string(argv[argc - 2]) == "true" || string(argv[argc - 2]) == "false"))
+        num_optional_args = 2;
+
+    const int num_seq = (argc - 3 - num_optional_args) / 2;
     cout << "num_seq = " << num_seq << endl;
-    bool bFileName= (((argc-3) % 2) == 1);
+
+    bool bFileName = (num_optional_args == 2);
     string file_name;
     if (bFileName)
     {
-        file_name = string(argv[argc-1]);
+        file_name = string(argv[argc - 1]);
         cout << "file name: " << file_name << endl;
     }
-    bool bUseViewer = true;
-    if (argc >= 7) {
-        std::string viewer_flag = std::string(argv[6]);
-        bUseViewer = (viewer_flag != "false");
-    }
 
+    bool bUseViewer = true;
+    if (num_optional_args >= 1)
+    {
+        std::string viewer_flag = std::string(argv[argc - num_optional_args]);
+        bUseViewer = (viewer_flag != "false");
+        cout << "bUseViewer: " << boolalpha << bUseViewer << endl;
+    }
 
     // Load all sequences:
     int seq;
